@@ -1,10 +1,16 @@
 <template>
 
 <div id="raffle-display" class="container">
-  <h1> {{ raffle.name }} </h1>
-  <h4> Benefitting {{ raffle.benefactor }} </h4>
-  <p> {{ raffle.description }} </p>
-  <p> Raffle ends on {{ raffle.end_date }} </p>
+  <meta name="viewport" content="width=500">
+  <div id="header">
+    <img :src="'http://radet5.com'+raffle.image">
+  </div>
+  <div class="column">
+    <h1> {{ raffle.name }} </h1>
+    <h4> Benefitting {{ raffle.benefactor }} </h4>
+    <p> {{ raffle.description }} </p>
+    <p> Raffle ends on {{ raffle.end_date }} </p>
+  </div>
 </div>
 
 </template>
@@ -21,8 +27,23 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container {
+}
+#header {
+  width: 100%;
+  text-align: center;
+}
+.column {
     width: 300px;
-    margin: 0 auto;
+    margin: auto;
+}
+img {
+  width: 500px;
+}
+@media (max-width: 500px) {
+  img {
+    padding-left: 50%;
+    margin-left: -250px;
+  }
 }
 h3 {
   margin: 40px 0 0;
