@@ -1,17 +1,68 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <raffle-display :raffle="raffle"/>
+    <raffle-item-display :raffle_items="raffle_items" 
+                         :ticket_cost="raffle.ticket_cost"
+                         @increment="increment"
+                         @decrement="decrement" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import RaffleDisplay from './components/RaffleDisplay.vue'
+import RaffleItemDisplay from './components/RaffleItemDisplay.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    RaffleDisplay,
+    RaffleItemDisplay
+  },
+  data () {
+    return {
+      raffle: {},
+      raffle_items: {},
+    }
+  },
+  mounted() {
+    this.getRaffleData()
+  },
+  methods: {
+    async getRaffleData() {
+      try {
+        const response = await fetch('http://radet5.com/api/raffles/156/raffleItems')
+        const data = await response.json()
+        this.raffle = data.data.raffle
+        this.raffle_items = data.data.raffle_items.map(item => {
+            item.ticket_count = 0
+            return item
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    increment(id) {
+      this.raffle_items = this.raffle_items.map(item => {
+        if (item.id === id && item.ticket_count < 100) {
+          item.ticket_count += 1
+          return item
+        }
+        else {
+          return item
+        }
+      })
+    },
+    decrement(id) {
+      this.raffle_items = this.raffle_items.map(item => {
+        if (item.id === id && item.ticket_count > 0) {
+          item.ticket_count -= 1
+          return item
+        }
+        else {
+          return item
+        }
+      })
+    } 
   }
 }
 </script>
