@@ -33,7 +33,7 @@ export default {
   text-align: center;
 }
 .column {
-    width: 300px;
+    width: 400px;
     margin: auto;
 }
 img {
