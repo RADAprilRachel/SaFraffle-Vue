@@ -17,12 +17,18 @@
     </div>
   </div>
   <div class="center-container">
-    <div class="card">
-      <p class="totals">Total Tickets:</p>
-      <p class="totals">Total Cost:</p>
+    <div :class="{ 'summary-card-sm':isSmall(), 'summary-card-lg':!isSmall() }">
+      <p class="totals-label">Total Tickets:</p>
     </div>
-    <div class="counter-container">
+    <div :class="{ 'counter-container-sm':isSmall(), 'counter-container-lg':!isSmall() }">
       <p class="totals">{{ total_tickets }}</p>
+    </div>
+  </div>
+  <div class="center-container">
+    <div :class="{ 'summary-card-sm':isSmall(), 'summary-card-lg':!isSmall() }">
+      <p class="totals-label">Total Cost:</p>
+    </div>
+    <div :class="{ 'counter-container-sm':isSmall(), 'counter-container-lg':!isSmall() }">
       <p class="totals">${{ total_cost }}</p>
     </div>
   </div>
@@ -63,10 +69,16 @@ export default {
 img {
     width: 75%;
 }
+.totals-label {
+  font-weight: bold;
+  border: solid;
+  padding: 0.5em;
+}
 .totals {
   font-weight: bold;
   border: solid;
   padding: 0.5em;
+  min-width: 60px;
 }
 .count {
   width: 35px;
@@ -92,12 +104,25 @@ p {
   margin: 0 auto;
   display: inline-block;
 }
+.summary-card-sm {
+  width: 50%;
+  margin: 0 auto;
+  display: inline-block;
+}
+.summary-card-lg {
+  width: 15%;
+  margin: 0 auto;
+  display: inline-block;
+}
+.counter-container-sm {
+  display: inline-block;
+}
 .counter-container-lg {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   display: inline-block;
-  margin-left: 3em;
+  margin-left: 2em;
 }
 h3 {
   margin: 40px 0 0;
