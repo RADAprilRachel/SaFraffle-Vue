@@ -26,10 +26,10 @@
   </div>
   <div class="center-container">
     <div :class="{ 'summary-card-sm':isSmall(), 'summary-card-lg':!isSmall() }">
-      <p class="totals-label">Total Cost:</p>
+      <p class="totals-label">Total Donation:</p>
     </div>
     <div :class="{ 'counter-container-sm':isSmall(), 'counter-container-lg':!isSmall() }">
-      <p class="totals">${{ total_cost }}</p>
+      <p class="totals">${{ total_donation }}</p>
     </div>
   </div>
 </div>
@@ -57,7 +57,7 @@ export default {
     total_tickets () {
       return this.raffle_items.reduce( (acc, item) => acc + Number(item.ticket_count), 0)
     },
-    total_cost () {
+    total_donation () {
       return parseFloat(this.total_tickets * this.ticket_cost).toFixed(2)
     }
   }
