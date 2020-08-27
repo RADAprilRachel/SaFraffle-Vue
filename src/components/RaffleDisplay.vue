@@ -3,7 +3,7 @@
 <div id="raffle-display" class="container">
   <meta name="viewport" content="width=500">
   <div id="header">
-    <img :src="'http://radet5.com'+raffle.image">
+    <img :src="'http://safraffle.com'+raffle.image">
   </div>
   <div class="column">
     <h1> {{ raffle.name }} </h1>

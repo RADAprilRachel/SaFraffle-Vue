@@ -30,7 +30,7 @@ export default {
   methods: {
     async getRaffleData() {
       try {
-        const response = await fetch('http://radet5.com/api/raffles/156/raffleItems')
+        const response = await fetch('https://safraffle.com/api/raffles/3/raffleItems')
         const data = await response.json()
         this.raffle = data.data.raffle
         this.raffle_items = data.data.raffle_items.map(item => {

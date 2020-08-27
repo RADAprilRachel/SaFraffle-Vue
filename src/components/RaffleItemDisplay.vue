@@ -6,7 +6,7 @@
       <h3> {{ raffle_item.name }} </h3>
       <p> {{ raffle_item.description }} </p>
       <p> Estimated ${{ raffle_item.value }} value</p>
-      <img :src="'http://radet5.com'+raffle_item.image">
+      <img :src="'http://safraffle.com'+raffle_item.image">
       <h5> Donated by {{ raffle_item.donor }} </h5>
     </div>
     <div :class="{ 'counter-container-lg':!isSmall() }">
