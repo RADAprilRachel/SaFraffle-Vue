@@ -8,8 +8,11 @@
   <div class="column">
     <h1> {{ raffle.name }} </h1>
     <h4> Benefitting {{ raffle.benefactor }} </h4>
-    <p> {{ raffle.description }} </p>
-    <p> Raffle ends on {{ raffle.end_date }} </p>
+    <div v-show="state === 'shop'">
+      <p> {{ raffle.description }} </p>
+      <p> Raffle ends on {{ raffle.end_date }} </p>
+      <p> Tickets cost ${{ ticket_cost }} each</p>
+    </div>
   </div>
 </div>
 
@@ -20,6 +23,8 @@ export default {
   name: 'RaffleDisplay',
   props: {
     raffle: Object,
+    state: String,
+    ticket_cost: String,
   }
 }
 </script>
@@ -37,6 +42,8 @@ export default {
     margin: auto;
 }
 img {
+  border-radius: 10px;
+  margin-top: 0px;
   width: 500px;
 }
 @media (max-width: 500px) {
