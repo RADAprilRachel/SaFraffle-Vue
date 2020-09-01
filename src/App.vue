@@ -50,8 +50,12 @@ export default {
           name: 'Raffle ticket for '+item.name,
           description: 'Raffle ticket',
           quantity: item.ticket_count,
-          price: this.raffle.ticket_cost,
-          currency: 'USD'
+          unit_amount: {
+              currency_code: "USD",
+              value: this.raffle.ticket_cost
+          },
+          sku: item.id,
+          category: "DIGITAL_GOODS"
         }
       })
     },

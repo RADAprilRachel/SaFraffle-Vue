@@ -25,6 +25,7 @@
       <p class="error">Payment not processed!</p>
     </div>
     <div class=paypal v-show="state === 'checkout'">
+      <div ref="paypal"></div>
       <PayPal
         @payment-cancelled="paymentCancelled"
         @payment-completed="paymentCompleted"
@@ -75,7 +76,53 @@ export default {
     total_donation: String,
     itemized_tickets: Array,
   },
+  mounted: function() {
+    const script = document.createElement("script");
+    script.src ="https://www.paypal.com/sdk/js?client-id=AdsXXE61inTIs-q731ToP4wjGgKodV8ZYxu53_NU184iGwql8WD8QdKv9eKZQHsNcbYhvLWBUWvJPNQs";
+    script.addEventListener("load", this.setLoaded);
+    document.body.appendChild(script);
+  },
   methods: {
+    setLoaded: function() {
+      this.loaded = true;
+      window.paypal
+        .Buttons({
+          createOrder: (data, actions) => {
+            return actions.order.create({
+              intent: "CAPTURE",
+              purchase_units: [
+                {
+                  description: "Raffle tickets for Safai fundraiser",
+                  amount: {
+                    currency_code: "USD",
+                    value: this.total_donation,
+                    breakdown: {
+                      item_total: {
+                        currency_code: "USD",
+                        value: this.total_donation,
+                      }
+                    }
+                  },
+                  items: this.itemized_tickets
+                }
+              ]
+            });
+          },
+          onApprove: async (data, actions) => {
+            const order = await actions.order.capture();
+            console.log(order);
+            this.paymentCompleted(order)
+          },
+          onError: err => {
+            console.log(err);
+            this.paymentCancelled()
+          },
+          onCancel: () => {
+            this.paymentCancelled()
+          }
+        })
+        .render(this.$refs.paypal);
+    },
     validate () {
       let result = {success: true, errors: {}}
       if (this.customer_name === "") {
