@@ -26,16 +26,6 @@
     </div>
     <div class=paypal v-show="state === 'checkout'">
       <div ref="paypal"></div>
-      <PayPal
-        @payment-cancelled="paymentCancelled"
-        @payment-completed="paymentCompleted"
-        :amount="total_donation"
-        currency="USD"
-        :client="credentials"
-        :items="itemized_tickets"
-        :experience="experience_options"
-        env="sandbox">
-      </PayPal>
     </div>
     <div v-show="state === 'complete'">
       <p class="success">Payment Completed!</p>
@@ -46,13 +36,9 @@
 </template>
 
 <script>
-import PayPal from 'vue-paypal-checkout'
 
 export default {
   name: 'CheckoutForm',
-  components: {
-    PayPal
-  },
   data () {
     return {
       customer_name: "",
@@ -64,16 +50,13 @@ export default {
         sandbox: 'AdsXXE61inTIs-q731ToP4wjGgKodV8ZYxu53_NU184iGwql8WD8QdKv9eKZQHsNcbYhvLWBUWvJPNQs',
         production: '<production client id>'
       },
-      experience_options: {
-       input_fields: {
-          no_shipping: 1
-        }
-      }
     }
   },
   props: {
     state: String,
     total_donation: String,
+    total_cost: String,
+    total_discount: String,
     itemized_tickets: Array,
   },
   mounted: function() {
@@ -99,18 +82,26 @@ export default {
                     breakdown: {
                       item_total: {
                         currency_code: "USD",
-                        value: this.total_donation,
+                        value: this.total_cost,
+                      },
+                      discount: {
+                        currency_code: "USD",
+                        value: this.total_discount,
                       }
                     }
                   },
                   items: this.itemized_tickets
                 }
-              ]
+              ],
+              application_context: {
+                shipping_preference: "NO_SHIPPING"
+              }
             });
           },
           onApprove: async (data, actions) => {
             const order = await actions.order.capture();
-            console.log(order);
+            console.log(order)
+            console.log(order.status)
             this.paymentCompleted(order)
           },
           onError: err => {
@@ -187,7 +178,9 @@ export default {
   text-align: center;
 }
 .paypal {
+  margin: auto;
   padding: 8px;
+  width: 300px;
 }
 .success {
   background-color: #adffc5;

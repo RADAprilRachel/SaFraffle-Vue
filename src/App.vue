@@ -7,13 +7,17 @@
                       :state="state"/>
       <raffle-item-display :raffle_items="raffle_items" 
                            :total_tickets="total_tickets"
+                           :total_cost="total_cost"
                            :total_donation="total_donation"
+                           :total_discount="total_discount"
                            :ticket_cost="raffle.ticket_cost"
                            :state="state"
                            @increment="increment"
                            @decrement="decrement" />
       <checkout-form :state="state"
                      :total_donation="total_donation"
+                     :total_cost="total_cost"
+                     :total_discount="total_discount"
                      :itemized_tickets="itemized_tickets"
                      @checkout="checkout"
                      @complete="paymentComplete"
@@ -62,8 +66,14 @@ export default {
     total_tickets () {
       return this.raffle_items.reduce( (acc, item) => acc + Number(item.ticket_count), 0)
     },
-    total_donation () {
+    total_cost () {
       return parseFloat(this.total_tickets * this.raffle.ticket_cost).toFixed(2)
+    },
+    total_donation () {
+      return parseFloat(this.total_cost - this.total_discount).toFixed(2)
+    },
+    total_discount () {
+      return parseFloat(Math.floor(this.total_tickets/5)*this.raffle.ticket_cost).toFixed(2)
     }
   },
   mounted() {

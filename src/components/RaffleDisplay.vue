@@ -11,10 +11,10 @@
   <div class="column">
     <h1 class="title"> {{ raffle.name }} </h1>
     <h4 class="subtitle"> Benefitting {{ raffle.benefactor }} </h4>
-    <div v-show="state === 'shop'">
+    <div class=card v-show="state === 'shop'">
       <p> {{ raffle.description }} </p>
       <p> Raffle ends on {{ raffle.end_date }} </p>
-      <p> Tickets cost ${{ ticket_cost }} each</p>
+      <p> Tickets cost ${{ ticket_cost }} each OR get 5 for ${{ ticket_cost*4 }}!</p>
     </div>
   </div>
 </div>
@@ -52,22 +52,30 @@ export default {
   text-align: center;
 }
 .column {
-    width: 400px;
+    width: 500px;
     margin: 0.75em auto auto;
     border: dashed;
     border-radius: 10px;
     border-color: #d86018;
 }
+.card {
+    width: auto;
+    margin: auto 1.5em auto;
+}
 img {
   border-radius: 10px;
   margin-top: 0px;
-  width: 500px;
+  width: 800px;
 }
 @media (max-width: 500px) {
   img {
     padding-left: 50%;
     margin-left: -250px;
+    width: 500px;
   }
+.column {
+  width: 400px;
+}
 }
 h3 {
   margin: 40px 0 0;

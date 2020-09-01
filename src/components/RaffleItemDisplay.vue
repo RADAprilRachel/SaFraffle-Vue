@@ -5,11 +5,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet">
   <div v-show="state === 'shop'" class="center-container" v-for="raffle_item in raffle_items" :key="raffle_item.id">
     <div :class="{ 'card-sm':isSmall(), 'card-lg':!isSmall() }">
-      <h3 class="subtitle"> {{ raffle_item.name }} </h3>
-      <p> {{ raffle_item.description }} </p>
-      <p> Estimated ${{ raffle_item.value }} value</p>
-      <img v-if="raffle_item.image" :src="'http://safraffle.com'+raffle_item.image">
-      <h5> Donated by {{ raffle_item.donor }} </h5>
+      <div class="card-content">
+        <h3 class="subtitle"> {{ raffle_item.name }} </h3>
+        <p> {{ raffle_item.description }} </p>
+        <p> Estimated ${{ raffle_item.value }} value</p>
+        <img v-if="raffle_item.image" :src="'http://safraffle.com'+raffle_item.image">
+        <h5> Donated by {{ raffle_item.donor }} </h5>
+      </div>
     </div>
     <div :class="{ 'counter-container-lg':!isSmall() }">
       <button class="button minus" @click="$emit('decrement', raffle_item.id)">-</button>
@@ -26,12 +28,23 @@
       <p class="totals">{{ total_tickets }}</p>
     </div>
   </div>
+  <div v-show="total_tickets%5-1 === 3" class="center-container">
+  <p class="notification">You have an unclaimed free ticket! Just add another ticket to redeem it</p>
+  </div>
+  <div v-show="state === 'shop' && total_discount > 0" class="center-container">
+    <div :class="{ 'summary-card-sm':isSmall(), 'summary-card-lg':!isSmall() }">
+      <p class="totals-label">Total Discount:</p>
+    </div>
+    <div v-show="state === 'shop' && total_discount > 0" :class="{ 'counter-container-sm':isSmall(), 'counter-container-lg':!isSmall() }">
+      <p class="totals">-${{ total_discount }}</p>
+    </div>
+  </div>
   <div v-show="state === 'shop'" class="center-container">
     <div :class="{ 'summary-card-sm':isSmall(), 'summary-card-lg':!isSmall() }">
       <p class="totals-label">Total Donation:</p>
     </div>
     <div :class="{ 'counter-container-sm':isSmall(), 'counter-container-lg':!isSmall() }">
-      <p class="totals">${{ total_donation }}</p>
+      <p class="totals">${{ total_donation}}</p>
     </div>
   </div>
   <div v-show="state === 'checkout'" class="center-container">
@@ -46,6 +59,8 @@
           </tr>
         </tbody>
         <tfoot>
+          <tr><th>SubTotal</th><th>{{ total_tickets }}</th><th>${{ total_cost }}</th></tr>
+          <tr><th>Discount</th><th>-</th><th>-${{ total_discount }}</th></tr>
           <tr><th>Total</th><th>{{ total_tickets }}</th><th>${{ total_donation }}</th></tr>
         </tfoot>
       </table>
@@ -71,7 +86,9 @@ export default {
   props: {
     raffle_items: Array,
     total_tickets: Number,
+    total_cost: String,
     total_donation: String,
+    total_discount: String,
     ticket_cost: String,
     state: String,
   }
@@ -152,19 +169,27 @@ p {
 .center-container {
   position: relative;
 }
+.notification {
+  width: 300px;
+  padding: 0.25em 0em;
+  margin: auto;
+  color: #ffffff;
+  background-color: #d86018;
+  border-radius: 10px;
+}
 .card-sm {
   color: white;
-  width: 80%;
+  width: 300px;
   margin: 2.0em auto 1em;
   display: inline-block;
   background: #5e514d;
 }
 .card-lg {
   color: white;
-  width: 25%;
+  width: 400px;
   margin: 1em auto;
   display: inline-block;
-  border-radius: 7px;
+  border-radius: 10px;
   background: #5e514d;
 }
 .summary-card-sm {
@@ -176,6 +201,9 @@ p {
   width: 10%;
   margin: 0 auto;
   display: inline-block;
+}
+.card-content {
+  margin: auto 1.5em auto;
 }
 .counter-container-sm {
   display: inline-block;
