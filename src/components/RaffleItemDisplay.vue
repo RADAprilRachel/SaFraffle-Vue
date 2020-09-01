@@ -1,9 +1,11 @@
 <template>
 
 <div id="raffle-item-display" class="container">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet">
   <div v-show="state === 'shop'" class="center-container" v-for="raffle_item in raffle_items" :key="raffle_item.id">
     <div :class="{ 'card-sm':isSmall(), 'card-lg':!isSmall() }">
-      <h3> {{ raffle_item.name }} </h3>
+      <h3 class="subtitle"> {{ raffle_item.name }} </h3>
       <p> {{ raffle_item.description }} </p>
       <p> Estimated ${{ raffle_item.value }} value</p>
       <img v-if="raffle_item.image" :src="'http://safraffle.com'+raffle_item.image">
@@ -78,6 +80,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.container {
+    font-family: 'Dosis', sans-serif;
+/*  background-color: #fff2ee;*/
+}
+.subtitle {
+    font-family: 'Josefin Slab', serif;
+    font-size: 1.5rem
+}
 img {
     width: 75%;
     border-radius: 20px;
@@ -85,6 +95,7 @@ img {
 table {
     border-collapse: collapse;
     border: 1px solid;
+    margin: 1em auto auto;
 }
 col {
     border: 1px solid;
@@ -142,17 +153,19 @@ p {
   position: relative;
 }
 .card-sm {
+  color: white;
   width: 80%;
   margin: 2.0em auto 1em;
   display: inline-block;
-  background: #ddd;
+  background: #5e514d;
 }
 .card-lg {
+  color: white;
   width: 25%;
   margin: 1em auto;
   display: inline-block;
   border-radius: 7px;
-  background: #ddd;
+  background: #5e514d;
 }
 .summary-card-sm {
   width: 50%;
@@ -199,7 +212,7 @@ position:relative;
   background-color:#d86018;
 }
 .minus {
-  background-color: #cccccc;
+  background-color: #5e514d;
 }
 .button:active{
   box-shadow:inset 0 0.6em 2em -0.3em rgba(0,0,0,0.55),inset 0 0 0em 0.05em rgba(255,255,255,0.12);

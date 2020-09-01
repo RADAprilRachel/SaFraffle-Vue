@@ -1,13 +1,16 @@
 <template>
 
 <div id="raffle-display" class="container">
+  <link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=500">
   <div id="header">
     <img :src="'http://safraffle.com'+raffle.image">
   </div>
   <div class="column">
-    <h1> {{ raffle.name }} </h1>
-    <h4> Benefitting {{ raffle.benefactor }} </h4>
+    <h1 class="title"> {{ raffle.name }} </h1>
+    <h4 class="subtitle"> Benefitting {{ raffle.benefactor }} </h4>
     <div v-show="state === 'shop'">
       <p> {{ raffle.description }} </p>
       <p> Raffle ends on {{ raffle.end_date }} </p>
@@ -31,7 +34,18 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.title {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 2rem;
+  color: #d86018;
+}
+.subtitle {
+  font-family: 'Josefin Slab', serif;
+  font-size: 1.25rem;
+}
 .container {
+  font-family: 'Dosis', sans-serif;
+/*background-color: #fff2ee;*/
 }
 #header {
   width: 100%;
@@ -39,7 +53,10 @@ export default {
 }
 .column {
     width: 400px;
-    margin: auto;
+    margin: 0.75em auto auto;
+    border: dashed;
+    border-radius: 10px;
+    border-color: #d86018;
 }
 img {
   border-radius: 10px;
