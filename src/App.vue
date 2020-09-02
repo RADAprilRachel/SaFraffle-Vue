@@ -19,6 +19,7 @@
                      :total_cost="total_cost"
                      :total_discount="total_discount"
                      :itemized_tickets="itemized_tickets"
+                     :custom_id="custom_id"
                      @checkout="checkout"
                      @complete="paymentComplete"
       />
@@ -45,6 +46,7 @@ export default {
       raffle_items: [],
       contact_data: {},
       paypal_response: {},
+      custom_id: Math.random().toString(36).slice(2)
     }
   },
   computed: {
@@ -98,6 +100,19 @@ export default {
             return item
         })
       } catch (error) {
+        console.error(error)
+      }
+    },
+    async addPurchase(contact_data, itemized_tickets, custom_id) {
+      try {
+        const response = await fetch('https://saffrafle.com/api/purchases', {
+          method: 'POST',
+          body: JSON.stringify({contact_data: contact_data, itemized_tickets: itemized_tickets, custom_id: custom_id}),
+          headers: { 'Content-type': 'application/json; charset=UTF-8' },
+        })
+        const data = await response.json()
+        console.log(data)
+    } catch (error) {
         console.error(error)
       }
     },

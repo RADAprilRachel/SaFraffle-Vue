@@ -58,6 +58,7 @@ export default {
     total_cost: String,
     total_discount: String,
     itemized_tickets: Array,
+    custom_id: String,
   },
   mounted: function() {
     const script = document.createElement("script");
@@ -76,6 +77,7 @@ export default {
               purchase_units: [
                 {
                   description: "Raffle tickets for Safai fundraiser",
+                  custom_id: this.custom_id,
                   amount: {
                     currency_code: "USD",
                     value: this.total_donation,
@@ -146,6 +148,7 @@ export default {
     },
     checkout () {
       let validation = this.validate()
+      this.addPurchase({}, this.itemized_tickets, this.custom_id)
       if (validation.success) {
         this.errors = {}
         this.$emit('checkout', {
@@ -156,6 +159,19 @@ export default {
       }
       else {
         this.errors = validation.errors
+      }
+    },
+    async addPurchase(contact_data, itemized_tickets, custom_id) {
+      try {
+        const response = await fetch('https://safraffle.com/api/purchases', {
+          method: 'POST',
+          body: JSON.stringify({contact_data: contact_data, itemized_tickets: itemized_tickets, custom_id: custom_id}),
+          headers: { 'Content-type': 'application/json; charset=UTF-8' },
+        })
+        const data = await response.json()
+        console.log(data)
+    } catch (error) {
+        console.error(error)
       }
     },
     paymentCompleted (response) {
