@@ -9,7 +9,7 @@
         <h3 class="subtitle"> {{ raffle_item.name }} </h3>
         <p> {{ raffle_item.description }} </p>
         <p> Estimated ${{ raffle_item.value }} value</p>
-        <img v-if="raffle_item.image" :src="'http://safraffle.com'+raffle_item.image">
+        <img v-if="raffle_item.image" :src="'https://safraffle.com'+raffle_item.image">
         <h5> Donated by {{ raffle_item.donor }} </h5>
       </div>
     </div>

@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=500">
   <div id="header">
-    <img :src="'http://safraffle.com'+raffle.image">
+    <img :src="'https://safraffle.com'+raffle.image">
   </div>
   <div class="column">
     <h1 class="title"> {{ raffle.name }} </h1>
