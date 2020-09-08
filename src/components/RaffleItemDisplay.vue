@@ -59,8 +59,8 @@
           </tr>
         </tbody>
         <tfoot>
-          <tr><th>SubTotal</th><th>{{ total_tickets }}</th><th>${{ total_cost }}</th></tr>
-          <tr><th>Discount</th><th>-</th><th>-${{ total_discount }}</th></tr>
+          <tr v-if="total_discount !== '0.00'"><th>SubTotal</th><th>{{ total_tickets }}</th><th>${{ total_cost }}</th></tr>
+          <tr v-if="total_discount !== '0.00'"><th>Discount</th><th>-</th><th>-${{ total_discount }}</th></tr>
           <tr><th>Total</th><th>{{ total_tickets }}</th><th>${{ total_donation }}</th></tr>
         </tfoot>
       </table>
