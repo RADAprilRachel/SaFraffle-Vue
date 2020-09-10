@@ -20,6 +20,7 @@
                      :total_discount="total_discount"
                      :itemized_tickets="itemized_tickets"
                      :custom_id="custom_id"
+                     :raffle_id="raffle.id"
                      @checkout="checkout"
                      @complete="paymentComplete"
       />
@@ -92,7 +93,7 @@ export default {
     },
     async getRaffleData() {
       try {
-        const response = await fetch('https://safraffle.com/api/raffles/3/raffleItems')
+        const response = await fetch('https://safraffle.com/api/raffles/1/raffleItems')
         const data = await response.json()
         this.raffle = data.data.raffle
         this.raffle_items = data.data.raffle_items.map(item => {
@@ -100,19 +101,6 @@ export default {
             return item
         })
       } catch (error) {
-        console.error(error)
-      }
-    },
-    async addPurchase(contact_data, itemized_tickets, custom_id) {
-      try {
-        const response = await fetch('https://saffrafle.com/api/purchases', {
-          method: 'POST',
-          body: JSON.stringify({contact_data: contact_data, itemized_tickets: itemized_tickets, custom_id: custom_id}),
-          headers: { 'Content-type': 'application/json; charset=UTF-8' },
-        })
-        const data = await response.json()
-        console.log(data)
-    } catch (error) {
         console.error(error)
       }
     },

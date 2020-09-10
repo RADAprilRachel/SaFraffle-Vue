@@ -45,10 +45,11 @@ export default {
       customer_email: "",
       customer_phone: "",
       contact_method: "",
+      purchase_id: null,
       errors: {},
       credentials: {
         sandbox: 'AdsXXE61inTIs-q731ToP4wjGgKodV8ZYxu53_NU184iGwql8WD8QdKv9eKZQHsNcbYhvLWBUWvJPNQs',
-        production: '<production client id>'
+        production: 'AdGw2AY8etwlYRaa9aDM20UTUVMBADMedk9O1My0SEFGcxJEj54oitfWHuh6eo848ip9cm-wqX6EpOFG'
       },
     }
   },
@@ -58,11 +59,12 @@ export default {
     total_cost: String,
     total_discount: String,
     itemized_tickets: Array,
+    raffle_id: Number,
     custom_id: String,
   },
   mounted: function() {
     const script = document.createElement("script");
-    script.src ="https://www.paypal.com/sdk/js?client-id=AdsXXE61inTIs-q731ToP4wjGgKodV8ZYxu53_NU184iGwql8WD8QdKv9eKZQHsNcbYhvLWBUWvJPNQs";
+    script.src ="https://www.paypal.com/sdk/js?client-id="+this.credentials.production;
     script.addEventListener("load", this.setLoaded);
     document.body.appendChild(script);
   },
@@ -148,24 +150,67 @@ export default {
     },
     checkout () {
       let validation = this.validate()
-      this.addPurchase({}, this.itemized_tickets, this.custom_id)
       if (validation.success) {
         this.errors = {}
-        this.$emit('checkout', {
+        let data = {
             customer_name: this.customer_name,
             customer_email: this.customer_email,
             customer_phone: this.customer_phone,
-            contect_method: this.contact_method})
+            contact_method: this.contact_method}
+        this.addPurchase(data, this.itemized_tickets, this.raffle_id, this.custom_id)
       }
       else {
         this.errors = validation.errors
       }
     },
-    async addPurchase(contact_data, itemized_tickets, custom_id) {
+    async addPurchase(contact_data, itemized_tickets, raffle_id, custom_id) {
       try {
         const response = await fetch('https://safraffle.com/api/purchases', {
           method: 'POST',
-          body: JSON.stringify({contact_data: contact_data, itemized_tickets: itemized_tickets, custom_id: custom_id}),
+          body: JSON.stringify({contact_data: contact_data, itemized_tickets: itemized_tickets, raffle_id:raffle_id, custom_id: custom_id}),
+          headers: { 'Content-type': 'application/json; charset=UTF-8' },
+        })
+        const data = await response.json()
+        console.log(data)
+        let errors = {}
+        if (data.success) {
+          this.purchase_id = data.purchase_id
+          this.$emit('checkout', data)
+          if (window.page === "pos") {
+            console.log("POS")
+            this.paymentCompleted({id: "POS"})
+          }
+        }
+        else {
+          if (data.errors.hasOwnProperty('contact_data.customer_name') === true) {
+            errors.customer_name = data.errors['contact_data.customer_name'][0]
+          }
+          if (data.errors.hasOwnProperty('contact_data.customer_phone') === true) {
+            errors.customer_phone = data.errors['contact_data.customer_phone'][0]
+          }
+          if (data.errors.hasOwnProperty('contact_data.customer_email') === true) {
+            errors.customer_email = data.errors['contact_data.customer_email'][0]
+          }
+          if (data.errors.hasOwnProperty('contact_data.contact_method') === true) {
+            errors.contact_method = data.errors['contact_data.contact_method'][0]
+          }
+        }
+        this.errors = errors
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    paymentCompleted (response) {
+      console.log(this.purchase_id)
+      this.addPayment(this.purchase_id, response.id, this.custom_id)
+      this.$emit('complete', response)
+      this.clearCancelError()
+    },
+    async addPayment(purchase_id, paypal_order_id, custom_id) {
+      try {
+        const response = await fetch('https://safraffle.com/api/payments', {
+          method: 'POST',
+          body: JSON.stringify({purchase_id: purchase_id, paypal_order_id: paypal_order_id, custom_id: custom_id}),
           headers: { 'Content-type': 'application/json; charset=UTF-8' },
         })
         const data = await response.json()
@@ -173,10 +218,6 @@ export default {
     } catch (error) {
         console.error(error)
       }
-    },
-    paymentCompleted (response) {
-      this.$emit('complete', response)
-      this.clearCancelError()
     },
     paymentCancelled () {
       this.$set(this.errors, 'cancel', true)
