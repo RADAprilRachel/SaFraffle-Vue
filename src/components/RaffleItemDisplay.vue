@@ -52,7 +52,7 @@
       <table>
         <thead><tr><th>Item</th><th>Tickets</th><th>Donation</th></tr></thead>
         <tbody>
-          <tr v-for="raffle_item in raffle_items" :key="raffle_item.id">
+          <tr v-for="raffle_item in raffle_items" :key="raffle_item.id" v-if="raffle_item.ticket_count > 0">
             <td>{{ raffle_item.name }}</td>
             <td>{{ raffle_item.ticket_count }}</td>
             <td>${{ parseFloat(ticket_cost*raffle_item.ticket_count).toFixed(2) }}</td>
