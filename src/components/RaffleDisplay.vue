@@ -13,7 +13,7 @@
     <h4 class="subtitle"> Benefitting {{ raffle.benefactor }} </h4>
     <div class=card v-show="state === 'shop'">
       <p> {{ raffle.description }} </p>
-      <p> Raffle ends on {{ raffle.end_date }} </p>
+      <p> Raffle ends on {{ raffle.end_date | formatDate }} </p>
       <p> Tickets cost ${{ ticket_cost }} each OR get 5 for ${{ ticket_cost*4 }}!</p>
     </div>
   </div>
